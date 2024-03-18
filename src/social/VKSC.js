@@ -6,7 +6,10 @@ import { Count } from './../Count.js'
  */
 export class VKSC extends Count {
     constructor(a) {
-        super()
+        super('object' == typeof a
+            && 'string' == typeof a.table
+            ? a.table
+            : undefined)
         this.body = 'object' == typeof a
             && 'string' == typeof a.body
             ? a.body

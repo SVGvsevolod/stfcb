@@ -6,7 +6,8 @@ import { loop } from './loop.js'
 config()
 // Defining counters
 global.vk_sc = new VKSC({
-    body: `access_token=${process.env.vk_k}&user_id=${process.env.vk_u}&v=${process.env.vk_v}`
+    body: `access_token=${process.env.vk_k}&user_id=${process.env.vk_u}&v=${process.env.vk_v}`,
+    table: process.env.vk_t
 })
 // Logging process termination
 process.on('exit', a => {

@@ -2,5 +2,6 @@
  * Main loop
  */
 export function loop() {
-    vk_sc.get()
+    console.log(vk_sc.cache)
+    //vk_sc.get()
 }
