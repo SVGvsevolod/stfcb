@@ -10,10 +10,12 @@ export class VKSC extends Count {
             && 'string' == typeof a.table
             ? a.table
             : undefined)
-        this.body = 'object' == typeof a
-            && 'string' == typeof a.body
-            ? a.body
-            : undefined
+        Object.defineProperty(this, 'body', {
+            value: 'object' == typeof a
+                && 'string' == typeof a.body
+                ? a.body
+                : undefined
+        })
     }
     /**
      * Overriden method for requesting subs count
@@ -27,6 +29,6 @@ export class VKSC extends Count {
         }))
         if ('object' == typeof a.response
          && 'number' == typeof a.response.count)
-            this.cache = a.response.count
+            this.store(a.response.count)
     }
 }
