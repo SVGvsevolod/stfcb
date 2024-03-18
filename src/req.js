@@ -1,7 +1,7 @@
 // Imports
 import { request } from 'node:https'
 /**
- * HTTP request function
+ * Custom HTTP request function
  * @param {object} a params (must have url)
  * @returns {*} requested data
  */
