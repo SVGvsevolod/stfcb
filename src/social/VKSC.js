@@ -2,6 +2,7 @@
 import { Count } from './../Count.js'
 /**
  * Inherited counter class for VK subscriber count
+ * @param {object} a params (must have body for requests)
  */
 export class VKSC extends Count {
     constructor(a) {
