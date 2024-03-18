@@ -1,11 +1,14 @@
 // Imports
 import { request } from 'node:https'
-// Global stuff declaration
-global.req = a => {
+/**
+ * HTTP request function
+ * @param {object} a params (must have url)
+ * @returns {*} requested data
+ */
+export function req(a) {
     return new Promise((b, c) => {
-        if ('object' != typeof a 
-         || 'object' == typeof a && 'string' != typeof a.method
-         && 'object' == typeof a && 'string' != typeof a.url)
+        if ('object' != typeof a
+         || 'object' == typeof a && 'string' != typeof a.url)
             c(new Error('No URL and method specified'))
         else {
             let d = ''
@@ -15,12 +18,13 @@ global.req = a => {
                 e['Content-Type'] = a.mime
             const f = request(a.url, {
                 headers: e,
-                method: a.method
+                method: 'string' == typeof a.method ? a.method : 'GET'
             }, a => {
                 a.on('data', a => {
                     d += a.toString()
                 })
                 a.on('end', () => {
+                    console.log(a)
                     b(d)
                 })
             })

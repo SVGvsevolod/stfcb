@@ -1,8 +1,24 @@
 // Imports
 import { config } from 'dotenv'
-import { vk_sc } from './social/vk_sc.js'
-import './req.js'
+import { VKSC } from './social/VKSC.js'
+import { loop } from './loop.js'
 // Laoding env vars
 config()
-
-vk_sc()
+// Defining counters
+global.vk_sc = new VKSC({
+    body: `access_token=${process.env.vk_k}&user_id=${process.env.vk_u}&v=${process.env.vk_v}`
+})
+// Logging process termination
+process.on('exit', a => {
+    process.stdout.write(`(${a}) by\n`)
+})
+// Interaction via Std
+process.stdin.on('data', a => {
+    switch (a.toString()) {
+        case 'exit\n':
+        case 'quit\n':
+            process.exit()
+    }
+})
+// Start the loop
+setInterval(loop, 5000)
