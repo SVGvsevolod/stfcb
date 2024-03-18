@@ -1,7 +1,8 @@
 {
     "dependencies": {
         "dotenv": "latest",
-        "mime-types": "2.1.35"
+        "mime-types": "2.1.35",
+        "pg": "latest"
     },
     "repository": {
         "type": "git",
