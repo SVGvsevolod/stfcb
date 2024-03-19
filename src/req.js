@@ -24,7 +24,7 @@ export function req(a) {
                     d += a.toString()
                 })
                 a.on('end', () => {
-                    console.log(a)
+                    //console.log(a)
                     b(d)
                 })
             })

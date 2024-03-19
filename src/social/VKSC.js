@@ -7,28 +7,42 @@ import { Count } from './../Count.js'
 export class VKSC extends Count {
     constructor(a) {
         super('object' == typeof a
-            && 'string' == typeof a.table
-            ? a.table
+            && a.tables instanceof Array
+            && a.tables.length
+            ? a.tables
             : undefined)
-        Object.defineProperty(this, 'body', {
-            value: 'object' == typeof a
-                && 'string' == typeof a.body
-                ? a.body
-                : undefined
+        Object.defineProperties(this, {
+            ids: {
+                value: 'object' == typeof a
+                    && a.ids instanceof Array
+                    && a.ids.length
+                    ? a.ids
+                    : undefined
+            },
+            key: {
+                value: 'object' == typeof a
+                    && 'string' == typeof a.key
+                    ? a.key
+                    : undefined
+            }
         })
     }
     /**
      * Overriden method for requesting subs count
      */
     async get() {
-        const a = JSON.parse(await super.get({
-            body: this.body,
-            method: 'POST',
-            mime: 'application/x-www-form-urlencoded',
-            url: 'https://api.vk.com/method/users.getFollowers'
-        }))
-        if ('object' == typeof a.response
-         && 'number' == typeof a.response.count)
-            this.store(a.response.count)
+        let a = []
+        for (let b in this.ids) {
+            const c = JSON.parse(await super.get({
+                body: `access_token=${this.key}&count=0&user_id=${this.ids[b]}&v=5.199`,
+                method: 'POST',
+                mime: 'application/x-www-form-urlencoded',
+                url: 'https://api.vk.com/method/users.getFollowers'
+            }))
+            if ('object' == typeof c.response
+             && 'number' == typeof c.response.count)
+                a.push(c.response.count)
+        }
+        this.store(a)
     }
 }
