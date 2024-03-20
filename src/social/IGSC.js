@@ -1,10 +1,10 @@
 // Imports
 import { Count } from './../Count.js'
 /**
- * Inherited counter class for VK subscriber count
- * @param {object} a params (must have body for requests)
+ * Inherited counter class for Instagram subscriber count
+ * @param {object} a params (must have credentials for requests)
  */
-export class VKSC extends Count {
+export class IGSC extends Count {
     constructor(a) {
         super('object' == typeof a
             && a.tables instanceof Array
@@ -34,15 +34,10 @@ export class VKSC extends Count {
         let a = []
         for (let b in this.ids) {
             const c = JSON.parse(await super.get({
-                body: `access_token=${this.key}&count=0&user_id=${this.ids[b]}&v=5.199`,
-                method: 'POST',
-                mime: 'application/x-www-form-urlencoded',
-                url: 'https://api.vk.com/method/users.getFollowers'
+                url: `https://graph.facebook.com/v19.0/17841405822304914?access_token=${this.key}&fields=biography%2Cid%2Cusername%2Cwebsite`
+                //url: `https://graph.facebook.com/v19.0/${this.ids[b]}?access_token=${this.key}&fields=followers_count`
             }))
-            if ('object' == typeof c.response
-             && 'number' == typeof c.response.count)
-                a[b] = c.response.count
+            console.log(c)
         }
-        this.store(a)
     }
 }

@@ -1,11 +1,17 @@
 // Imports
 import { config } from 'dotenv'
+import { IGSC } from './social/IGSC.js'
 import { VKSC } from './social/VKSC.js'
 import { YTSC } from './social/YTSC.js'
 import { loop } from './loop.js'
 // Laoding env vars
 config()
 // Defining counters
+global.ig_sc = new IGSC({
+    ids: JSON.parse(process.env.ig_u),
+    key: process.env.ig_k,
+    tables: JSON.parse(process.env.ig_t)
+})
 global.vk_sc = new VKSC({
     ids: JSON.parse(process.env.vk_u),
     key: process.env.vk_k,
@@ -29,4 +35,5 @@ process.stdin.on('data', a => {
     }
 })
 // Start the loop
-setInterval(loop, 5000)
+//setInterval(loop, 5000)
+ig_sc.get()
