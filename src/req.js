@@ -16,6 +16,9 @@ export function req(a) {
             e['User-Agent'] = 'stfcb (https://svg.moe/)'
             if ('string' == typeof a.mime)
                 e['Content-Type'] = a.mime
+            if ('object' == typeof a.headers)
+                for (let b in Object.keys(a.headers))
+                    e[Object.keys(a.headers)[b]] = a.headers[Object.keys(a.headers)[b]]
             const f = request(a.url, {
                 headers: e,
                 method: 'string' == typeof a.method ? a.method : 'GET'
@@ -24,7 +27,7 @@ export function req(a) {
                     d += a.toString()
                 })
                 a.on('end', () => {
-                    //console.log(a)
+                    console.log(a)
                     b(d)
                 })
             })
