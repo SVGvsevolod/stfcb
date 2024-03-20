@@ -7,14 +7,7 @@ import { req } from './req.js'
  */
 export class Count {
     constructor(a) {
-        const b = new pg.Client({
-            database: process.env.pg_db,
-            password: process.env.pg_p,
-            user: process.env.pg_u
-        }),
-            c = this,
-            d = 0
-        Object.defineProperties(c, {
+        Object.defineProperties(this, {
             cache: {
                 value: []
             },
@@ -22,28 +15,12 @@ export class Count {
                 value: a
             }
         })
-        for (let a in c.tables)
-            Object.defineProperty(c.cache, a, {
+        for (let a in this.tables)
+            Object.defineProperty(this.cache, a, {
                 configurable: true,
                 value: 0
             })
-        b.connect().then(() => {
-            b.query('select subscount from ' + c.tables[d]).then(a => {
-                if (a.rowCount)
-                    Object.defineProperty(c.cache, d, {
-                        configurable: true,
-                        value: a.rows[0].subscount
-                    })
-                if (d == c.cache.length-1)
-                    b.end()
-                else
-                    d++
-            }).catch(() => {
-
-            })
-        }).catch(() => {
-
-        })
+        this.#a()
     }
     /**
      * Get the value (abstract method)
@@ -56,7 +33,7 @@ export class Count {
             return await req(a)
     }
     /**
-     * Stores the value in DB (must be called inside overriden get() method)
+     * Stores the value in the DB (must be called inside overriden get() method)
      * @param {Array} a new values 
      */
     async store(a) {
@@ -85,5 +62,36 @@ export class Count {
                         })
                     }
                 }
+    }
+    /**
+     * Private method for retrieving values from the DB
+     */
+    async #a() {
+        const a = new pg.Client({
+            database: process.env.pg_db,
+            password: process.env.pg_p,
+            user: process.env.pg_u
+        })
+        try {
+            await a.connect()
+        } catch(a) {
+
+        }
+        for (let b in this.tables)
+            try {
+                const c = await a.query('select subscount from ' + this.tables[b])
+                if (c.rowCount)
+                    Object.defineProperty(this.cache, b, {
+                        configurable: true,
+                        value: c.rows[0].subscount
+                    })
+            } catch(a) {
+
+            }
+        try {
+            await a.end()
+        } catch(a) {
+            
+        }
     }
 }
